@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>REVO-LUTION Paie — Ets. Solution Comptable — Bangui RCA</title>
+  <style>
+    /* ── Reset & base ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #222;
+      background: #f8f9fb;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; }
+
+    /* ── Couleurs ───────────────────────────────────────────────── */
+    :root {
+      --bleu:      #1a3a6e;
+      --bleu-clair:#2563a8;
+      --accent:    #e8a020;
+      --gris:      #f0f2f5;
+      --texte:     #333;
+    }
+
+    /* ── Navigation ─────────────────────────────────────────────── */
+    nav {
+      background: var(--bleu);
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,.3);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 0;
+    }
+    .nav-logo span {
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+    .nav-logo small {
+      display: block;
+      color: #aac4ee;
+      font-size: .72rem;
+      font-weight: 400;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 28px;
+    }
+    nav ul a {
+      color: #cde;
+      font-size: .92rem;
+      transition: color .2s;
+    }
+    nav ul a:hover { color: var(--accent); }
+
+    /* ── Hero ───────────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--bleu) 60%, var(--bleu-clair));
+      color: white;
+      padding: 80px 5% 90px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p {
+      font-size: 1.15rem;
+      color: #cde;
+      max-width: 620px;
+      margin: 0 auto 32px;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: .82rem;
+      color: #cde;
+      margin-bottom: 20px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 14px 36px;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+    .btn-accent  { background: var(--accent); color: white; }
+    .btn-outline { background: transparent; border: 2px solid white; color: white; margin-left: 12px; }
+
+    /* ── Sections communes ──────────────────────────────────────── */
+    section { padding: 70px 5%; }
+    .section-title {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--bleu);
+      margin-bottom: 10px;
+    }
+    .section-sub {
+      text-align: center;
+      color: #666;
+      margin-bottom: 48px;
+      font-size: .97rem;
+    }
+
+    /* ── Fonctionnalités ────────────────────────────────────────── */
+    .features { background: white; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 28px;
+    }
+    .feature-card {
+      background: var(--gris);
+      border-radius: 10px;
+      padding: 28px 24px;
+      border-top: 4px solid var(--bleu-clair);
+      transition: box-shadow .2s;
+    }
+    .feature-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.1); }
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+    .feature-card h3 {
+      font-size: 1.05rem;
+      color: var(--bleu);
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      font-size: .88rem;
+      color: #555;
+    }
+
+    /* ── Conformité légale ──────────────────────────────────────── */
+    .legal { background: var(--gris); }
+    .legal-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .legal-badge {
+      background: white;
+      border: 2px solid var(--bleu);
+      color: var(--bleu);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: 600;
+      font-size: .9rem;
+    }
+
+    /* ── Tarification ───────────────────────────────────────────── */
+    .pricing { background: white; }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 28px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .pricing-card {
+      border: 2px solid #dde;
+      border-radius: 12px;
+      padding: 36px 28px;
+      text-align: center;
+      position: relative;
+      background: white;
+    }
+    .pricing-card.popular {
+      border-color: var(--bleu-clair);
+      box-shadow: 0 8px 32px rgba(37,99,168,.18);
+    }
+    .popular-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: white;
+      font-size: .78rem;
+      font-weight: 700;
+      padding: 4px 16px;
+      border-radius: 20px;
+    }
+    .pricing-card h3 {
+      font-size: 1.1rem;
+      color: var(--bleu);
+      margin-bottom: 8px;
+    }
+    .price {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--bleu);
+      margin: 16px 0 4px;
+    }
+    .price sup { font-size: 1rem; vertical-align: super; }
+    .price-period { color: #888; font-size: .85rem; margin-bottom: 24px; }
+    .pricing-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 28px;
+    }
+    .pricing-features li {
+      padding: 6px 0;
+      font-size: .9rem;
+      color: #444;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .pricing-features li::before {
+      content: "✔  ";
+      color: #2a9d2a;
+      font-weight: 700;
+    }
+
+    /* ── Comment commander ──────────────────────────────────────── */
+    .how { background: var(--gris); }
+    .steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      counter-reset: step;
+    }
+    .step {
+      background: white;
+      border-radius: 10px;
+      padding: 28px 24px;
+      width: 200px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,.07);
+    }
+    .step-num {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--bleu);
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+    }
+    .step h4 { font-size: .95rem; color: var(--bleu); margin-bottom: 6px; }
+    .step p  { font-size: .82rem; color: #666; }
+
+    /* ── Formulaire de commande ─────────────────────────────────── */
+    .order { background: white; }
+    .order-form {
+      max-width: 580px;
+      margin: 0 auto;
+      background: var(--gris);
+      border-radius: 14px;
+      padding: 40px 36px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    }
+    .form-group { margin-bottom: 18px; }
+    label {
+      display: block;
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--bleu);
+      margin-bottom: 6px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #ccd;
+      border-radius: 6px;
+      font-size: .95rem;
+      font-family: inherit;
+      background: white;
+      transition: border-color .2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--bleu-clair);
+    }
+    textarea { resize: vertical; min-height: 90px; }
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--bleu);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-submit:hover { background: var(--bleu-clair); }
+    .form-note {
+      text-align: center;
+      color: #888;
+      font-size: .8rem;
+      margin-top: 14px;
+    }
+
+    /* ── Contact rapide ─────────────────────────────────────────── */
+    .contact-bar {
+      background: var(--bleu);
+      color: white;
+      padding: 32px 5%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .contact-item { font-size: .95rem; }
+    .contact-item strong { display: block; color: var(--accent); font-size: 1.05rem; }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    footer {
+      background: #111827;
+      color: #9ca3af;
+      text-align: center;
+      padding: 24px 5%;
+      font-size: .85rem;
+    }
+    footer strong { color: white; }
+
+    /* ── WhatsApp flottant ───────────────────────────────────────── */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 999;
+      background: #25d366;
+      color: white;
+      border-radius: 50px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: .95rem;
+      box-shadow: 0 4px 20px rgba(37,211,102,.5);
+      transition: transform .2s, box-shadow .2s;
+      text-decoration: none;
+    }
+    .whatsapp-float:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(37,211,102,.6);
+    }
+    .whatsapp-float svg { width: 26px; height: 26px; fill: white; }
+
+    /* ── Mockup app ──────────────────────────────────────────────── */
+    .screenshot { background: var(--bleu); padding: 60px 5%; }
+    .mockup-window {
+      max-width: 820px;
+      margin: 0 auto;
+      background: #f0f2f5;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,.5);
+    }
+    .mockup-titlebar {
+      background: #1a3a6e;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mockup-dot { width:12px; height:12px; border-radius:50%; }
+    .mockup-title { color: #aac4ee; font-size:.85rem; margin-left:8px; }
+    .mockup-body { padding: 16px; }
+    .mockup-menu {
+      background: #e8eaf0;
+      border-bottom: 1px solid #ccc;
+      padding: 6px 12px;
+      display: flex;
+      gap: 20px;
+      font-size: .8rem;
+      color: #333;
+    }
+    .mockup-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 16px;
+    }
+    .mockup-card {
+      background: white;
+      border-radius: 8px;
+      padding: 14px;
+      border-left: 4px solid var(--bleu-clair);
+    }
+    .mockup-card h4 { font-size: .8rem; color: #888; margin-bottom: 6px; }
+    .mockup-card .val { font-size: 1.4rem; font-weight: 800; color: var(--bleu); }
+    .mockup-table {
+      background: white;
+      border-radius: 8px;
+      padding: 14px;
+      grid-column: span 2;
+    }
+    .mockup-table h4 { font-size: .85rem; color: var(--bleu); margin-bottom: 10px; font-weight: 700; }
+    .mockup-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      font-size: .78rem;
+      padding: 6px 0;
+      border-bottom: 1px solid #f0f0f0;
+      color: #444;
+    }
+    .mockup-row.header { font-weight: 700; color: var(--bleu); background: #f5f7fa; padding: 8px 0; border-radius: 4px; }
+
+    /* ── Responsive ──────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.8rem; }
+      .btn-outline { display: none; }
+      nav ul { display: none; }
+      .order-form { padding: 24px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAVIGATION ══════════════════════════════════════════════════ -->
+<nav>
+  <div class="nav-logo">
+    <img src="logo_csc.png" alt="CSC SOLCOM" style="height:48px;width:48px;object-fit:cover;border-radius:50%;background:white;padding:2px;" />
+    <div>
+      <span>REVO-LUTION Paie</span>
+      <small>Ets. Solution Comptable</small>
+    </div>
+  </div>
+  <ul>
+    <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+    <li><a href="#tarifs">Tarifs</a></li>
+    <li><a href="#commander">Commander</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ══ HERO ════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <img src="logo_csc.png" alt="CSC SOLCOM" style="height:150px;width:150px;object-fit:cover;border-radius:50%;background:white;padding:6px;margin-bottom:20px;box-shadow:0 8px 24px rgba(0,0,0,0.4);" /><br>
+  <div class="badge">&#127464;&#127467; Conçu spécialement pour la République Centrafricaine</div>
+  <h1>La paie de vos employés,<br><span>simplifiée et conforme</span></h1>
+  <p>
+    REVO-LUTION Paie est le premier logiciel de gestion de la paie entièrement
+    adapté au Code du travail RCA, au CSS-RCA et au Code Général des Impôts.
+    Édité par <strong style="color:var(--accent)">Ets. Solution Comptable</strong> — Bangui, RCA.
+  </p>
+  <a href="#commander" class="btn btn-accent">Commander maintenant</a>
+  <a href="#fonctionnalites" class="btn btn-outline">Découvrir</a>
+</section>
+
+<!-- ══ FONCTIONNALITÉS ═════════════════════════════════════════════ -->
+<section class="features" id="fonctionnalites">
+  <h2 class="section-title">Tout ce dont vous avez besoin</h2>
+  <p class="section-sub">Un logiciel complet, pensé pour les entreprises centrafricaines</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">&#128179;</div>
+      <h3>Traitement des salaires</h3>
+      <p>Calcul automatique des salaires mensuels, primes, avantages, heures supplémentaires et déductions.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">&#128196;</div>
+      <h3>Bulletins de paie</h3>
+      <p>Génération et impression des bulletins de paie conformes aux exigences légales RCA.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">&#127970;</div>
+      <h3>Déclarations CNSS</h3>
+      <p>Bordereau de déclaration mensuelle CNSS et attestations de prise en charge automatisés.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">&#128202;</div>
+      <h3>Déclaration IRPP</h3>
+      <p>Déclaration fiscale annuelle IRPP générée automatiquement selon le CGI-RCA.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">&#128101;</div>
+      <h3>Gestion du personnel</h3>
+      <p>Registre des employés, congés payés, absences, avances et acomptes sur salaire.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">&#128274;</div>
+      <h3>Sécurité & rôles</h3>
+      <p>Gestion des utilisateurs avec niveaux d'accès (admin, RH, comptable) et sauvegarde automatique.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">&#128200;</div>
+      <h3>Rapports & analyses</h3>
+      <p>Livre de paie, rapport mensuel, statistiques des heures travaillées et analyse des coûts.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">&#128196;</div>
+      <h3>Documents RH</h3>
+      <p>Attestation de salaire, certificat de travail, solde de tout compte générés en PDF.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONFORMITÉ LÉGALE ═══════════════════════════════════════════ -->
+<section class="legal">
+  <h2 class="section-title">100 % conforme à la législation RCA</h2>
+  <p class="section-sub">Mise à jour selon les textes en vigueur</p>
+  <div class="legal-list">
+    <div class="legal-badge">Code du travail RCA</div>
+    <div class="legal-badge">CSS-RCA (CNSS)</div>
+    <div class="legal-badge">Code Général des Impôts</div>
+    <div class="legal-badge">SMIG en vigueur</div>
+    <div class="legal-badge">IRPP & retenues fiscales</div>
+    <div class="legal-badge">Grille salariale officielle</div>
+  </div>
+</section>
+
+<!-- ══ TARIFICATION ════════════════════════════════════════════════ -->
+<section class="pricing" id="tarifs">
+  <h2 class="section-title">Tarifs</h2>
+  <p class="section-sub">Licence monoposte — paiement unique, sans abonnement mensuel</p>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <h3>TPE / Association</h3>
+      <div class="price"><sup>FCFA </sup>75 000</div>
+      <div class="price-period">1 – 10 employés · licence permanente</div>
+      <ul class="pricing-features">
+        <li>1 poste de travail</li>
+        <li>Toutes les fonctionnalités</li>
+        <li>Mises à jour 1 an incluses</li>
+        <li>Support par WhatsApp</li>
+      </ul>
+      <a href="#commander" class="btn btn-outline" style="border-color:var(--bleu);color:var(--bleu);display:block;text-align:center;">Commander</a>
+    </div>
+    <div class="pricing-card popular">
+      <div class="popular-badge">Le plus choisi</div>
+      <h3>PME / Cabinet</h3>
+      <div class="price"><sup>FCFA </sup>120 000</div>
+      <div class="price-period">11 – 50 employés · licence permanente</div>
+      <ul class="pricing-features">
+        <li>1 poste de travail</li>
+        <li>Toutes les fonctionnalités</li>
+        <li>Mises à jour 2 ans incluses</li>
+        <li>Support prioritaire WhatsApp</li>
+        <li>Formation à domicile (Bangui)</li>
+      </ul>
+      <a href="#commander" class="btn btn-accent" style="display:block;text-align:center;">Commander</a>
+    </div>
+    <div class="pricing-card">
+      <h3>Grande entreprise</h3>
+      <div class="price"><sup>FCFA </sup>200 000</div>
+      <div class="price-period">50+ employés · licence permanente</div>
+      <ul class="pricing-features">
+        <li>1 poste de travail</li>
+        <li>Toutes les fonctionnalités</li>
+        <li>Mises à jour 2 ans incluses</li>
+        <li>Support dédié</li>
+        <li>Formation incluse (Bangui)</li>
+      </ul>
+      <a href="#commander" class="btn btn-outline" style="border-color:var(--bleu);color:var(--bleu);display:block;text-align:center;">Commander</a>
+    </div>
+  </div>
+
+  <!-- Services complémentaires -->
+  <div style="max-width:700px;margin:48px auto 0;">
+    <h3 style="text-align:center;color:var(--bleu);margin-bottom:20px;">Services complémentaires</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;">
+      <div style="background:var(--gris);border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:1.5rem;">&#128272;</div>
+        <div style="font-weight:700;color:var(--bleu);margin:6px 0 4px;">Poste supplémentaire</div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--bleu-clair);">40 000 FCFA</div>
+      </div>
+      <div style="background:var(--gris);border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:1.5rem;">&#128260;</div>
+        <div style="font-weight:700;color:var(--bleu);margin:6px 0 4px;">Maintenance annuelle</div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--bleu-clair);">20 000 FCFA/an</div>
+      </div>
+      <div style="background:var(--gris);border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:1.5rem;">&#127979;</div>
+        <div style="font-weight:700;color:var(--bleu);margin:6px 0 4px;">Formation</div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--bleu-clair);">25 000 FCFA</div>
+      </div>
+      <div style="background:var(--gris);border-radius:8px;padding:16px;text-align:center;">
+        <div style="font-size:1.5rem;">&#128257;</div>
+        <div style="font-weight:700;color:var(--bleu);margin:6px 0 4px;">Réactivation (nouveau PC)</div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--bleu-clair);">15 000 FCFA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ APERÇU DE L'APPLICATION ════════════════════════════════════ -->
+<section class="screenshot">
+  <h2 class="section-title" style="color:white;">L'interface du logiciel</h2>
+  <p class="section-sub" style="color:#aac4ee;">Simple, claire et adaptée à votre quotidien</p>
+  <div class="mockup-window">
+    <div class="mockup-titlebar">
+      <div class="mockup-dot" style="background:#ff5f57;"></div>
+      <div class="mockup-dot" style="background:#ffbd2e;"></div>
+      <div class="mockup-dot" style="background:#28c840;"></div>
+      <span class="mockup-title">Gestion RH — REVO-LUTION Paie v1.0.4</span>
+    </div>
+    <div class="mockup-menu">
+      <span>Fichier</span><span>Structure</span><span>Traitement</span>
+      <span>États</span><span>Analyse</span><span>Configuration</span><span>Aide</span>
+    </div>
+    <div class="mockup-body">
+      <div class="mockup-content">
+        <div class="mockup-card">
+          <h4>Total employés</h4>
+          <div class="val">24</div>
+        </div>
+        <div class="mockup-card">
+          <h4>Masse salariale (mois)</h4>
+          <div class="val" style="font-size:1.1rem;">4 820 000 FCFA</div>
+        </div>
+        <div class="mockup-card">
+          <h4>Cotisations CNSS</h4>
+          <div class="val" style="font-size:1.1rem;">722 000 FCFA</div>
+        </div>
+        <div class="mockup-card">
+          <h4>Bulletins générés</h4>
+          <div class="val">24 / 24</div>
+        </div>
+        <div class="mockup-table">
+          <h4>Liste du personnel — Mars 2025</h4>
+          <div class="mockup-row header">
+            <span>Employé</span><span>Salaire brut</span><span>CNSS</span><span>Net à payer</span>
+          </div>
+          <div class="mockup-row">
+            <span>NGATCHOU Jean-Paul</span><span>250 000</span><span>19 500</span><span>217 800</span>
+          </div>
+          <div class="mockup-row">
+            <span>KETTE Marie-Claire</span><span>180 000</span><span>14 040</span><span>154 700</span>
+          </div>
+          <div class="mockup-row">
+            <span>DOZOUA Patrice</span><span>320 000</span><span>24 960</span><span>279 500</span>
+          </div>
+          <div class="mockup-row" style="color:#888;font-style:italic;">
+            <span>21 autres employés…</span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ COMMENT COMMANDER ═══════════════════════════════════════════ -->
+<section class="how">
+  <h2 class="section-title">Comment commander ?</h2>
+  <p class="section-sub">4 étapes simples pour démarrer</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Remplissez le formulaire</h4>
+      <p>Donnez-nous vos coordonnées et le type de licence souhaité.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>Effectuez le paiement</h4>
+      <p>Par Mobile Money ou virement bancaire sur nos coordonnées.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>Téléchargez & installez</h4>
+      <p>Vous recevez le lien de téléchargement par WhatsApp ou email.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>Activez la licence</h4>
+      <p>Nous vous envoyons votre clé d'activation personnelle sous 24 h.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FORMULAIRE DE COMMANDE ══════════════════════════════════════ -->
+<section class="order" id="commander">
+  <h2 class="section-title">Passer commande</h2>
+  <p class="section-sub">Remplissez le formulaire — nous vous recontactons sous 24 h</p>
+  <div class="order-form">
+    <form id="waForm" onsubmit="envoyerWhatsApp(event)">
+      <div class="form-group">
+        <label for="nom">Nom complet *</label>
+        <input type="text" id="nom" placeholder="Ex : Jean-Pierre Ngatchou" required />
+      </div>
+      <div class="form-group">
+        <label for="entreprise">Entreprise / Cabinet</label>
+        <input type="text" id="entreprise" placeholder="Ex : Cabinet SOLCOM" />
+      </div>
+      <div class="form-group">
+        <label for="tel">Téléphone / WhatsApp *</label>
+        <input type="tel" id="tel" placeholder="+236 75 42 05 98" required />
+      </div>
+      <div class="form-group">
+        <label for="licence">Type de licence *</label>
+        <select id="licence" required>
+          <option value="">-- Choisissez --</option>
+          <option value="TPE / Association — 75 000 FCFA">TPE / Association — 75 000 FCFA</option>
+          <option value="PME / Cabinet — 120 000 FCFA">PME / Cabinet — 120 000 FCFA</option>
+          <option value="Grande entreprise — 200 000 FCFA">Grande entreprise — 200 000 FCFA</option>
+          <option value="Multi-postes — Sur devis">Multi-postes — Sur devis</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="message">Message (optionnel)</label>
+        <textarea id="message" placeholder="Questions, besoins spécifiques..."></textarea>
+      </div>
+      <button type="submit" class="btn-submit" style="background:#25d366;">
+        &#128232; Envoyer via WhatsApp
+      </button>
+      <p class="form-note">Votre commande sera envoyée directement sur WhatsApp</p>
+    </form>
+  </div>
+  <script>
+  function envoyerWhatsApp(e) {
+    e.preventDefault();
+    var nom       = document.getElementById('nom').value.trim();
+    var entreprise= document.getElementById('entreprise').value.trim();
+    var tel       = document.getElementById('tel').value.trim();
+    var licence   = document.getElementById('licence').value;
+    var msg       = document.getElementById('message').value.trim();
+    var texte =
+      'Bonjour, je souhaite commander REVO-LUTION Paie.\n\n' +
+      'Nom : ' + nom + '\n' +
+      (entreprise ? 'Entreprise : ' + entreprise + '\n' : '') +
+      'Téléphone : ' + tel + '\n' +
+      'Licence : ' + licence + '\n' +
+      (msg ? 'Message : ' + msg : '');
+    var url = 'https://wa.me/23675420598?text=' + encodeURIComponent(texte);
+    window.open(url, '_blank');
+  }
+  </script>
+</section>
+
+<!-- ══ CONTACT RAPIDE ══════════════════════════════════════════════ -->
+<div class="contact-bar" id="contact">
+  <div class="contact-item">
+    <strong>&#128222; Téléphone / WhatsApp</strong>
+    +236 75 42 05 98
+  </div>
+  <div class="contact-item">
+    <strong>&#9993; Email</strong>
+    ngatchousainthardi@gmail.com
+  </div>
+  <div class="contact-item">
+    <strong>&#128205; Adresse</strong>
+    Av. Charles de Gaulle, Abbé, Bangui, RCA
+  </div>
+  <div class="contact-item">
+    <strong>&#128336; Horaires</strong>
+    Lun – Ven : 8h00 – 17h00
+  </div>
+  <div class="contact-item">
+    <strong>&#128196; RCCM</strong>
+    CA/BG/2018 A 1511
+  </div>
+</div>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════════════ -->
+<footer>
+  <p>
+    &copy; 2025 <strong>Ets. Solution Comptable</strong> — NGATCHOU Saint-Hardi — Bangui, RCA.
+    Tous droits réservés.
+  </p>
+  <p style="margin-top:6px;">
+    RCCM : <strong>CA/BG/2018 A 1511</strong> &nbsp;|&nbsp; NIU : <strong>2362025P725550</strong>
+  </p>
+  <p style="margin-top:6px;">
+    <strong>REVO-LUTION Paie</strong> v1.0.4 —
+    Licence monoposte — Conforme au Code du travail RCA, CSS-RCA et CGI-RCA.
+  </p>
+</footer>
+
+<!-- ══ BOUTON WHATSAPP FLOTTANT ════════════════════════════════════ -->
+<a class="whatsapp-float" href="https://wa.me/23675420598?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20REVO-LUTION%20Paie." target="_blank">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+  Commander sur WhatsApp
+</a>
+
+</body>
+</html>
