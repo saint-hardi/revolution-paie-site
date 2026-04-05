@@ -3,804 +3,1463 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>REVO-LUTION Paie — Ets. Solution Comptable — Bangui RCA</title>
+  <title>REVO-LUTION Paie — Logiciel de paie RCA — Ets. Solution Comptable</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
-    /* ── Reset & base ───────────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; font-size: 16px; }
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: #222;
-      background: #f8f9fb;
-      line-height: 1.6;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      color: #0D1B2E;
+      background: #fff;
+      line-height: 1.65;
+      overflow-x: hidden;
     }
     a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; }
+    img { max-width: 100%; display: block; }
 
-    /* ── Couleurs ───────────────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════════════
+       VARIABLES
+    ═══════════════════════════════════════════════════════ */
     :root {
-      --bleu:      #1a3a6e;
-      --bleu-clair:#2563a8;
-      --accent:    #e8a020;
-      --gris:      #f0f2f5;
-      --texte:     #333;
+      /* ── Charte graphique CSC SOLCOM ── */
+      --primary:    #1A7ED4;   /* bleu arc métallique du logo           */
+      --primary-dk: #1464AA;   /* bleu foncé (hover / ombres)           */
+      --primary-lt: #E3F2FD;   /* bleu très clair (fonds doux)          */
+      --accent:     #29B6F6;   /* cyan – contour des lettres "CSC"      */
+      --accent-dk:  #0398D4;   /* cyan foncé (hover)                    */
+      --orange:     #FF6B35;   /* orange conservé pour alertes/CTA      */
+      --dark:       #0D1B2E;   /* bleu nuit / silhouette sombre du logo */
+      --mid:        #1E3A5F;   /* intermédiaire bleu marine             */
+      --muted:      #5A7A9A;   /* texte secondaire bleuté               */
+      --border:     #C9DFF2;   /* bordures bleutées légères             */
+      --bg-soft:    #F0F7FF;   /* fond de page très légèrement bleuté  */
+      --white:      #ffffff;
+      --radius-sm:  8px;
+      --radius-md:  14px;
+      --radius-lg:  24px;
+      --shadow-sm:  0 1px 3px rgba(26,126,212,.10), 0 1px 2px rgba(0,0,0,.06);
+      --shadow-md:  0 4px 16px rgba(26,126,212,.14);
+      --shadow-lg:  0 20px 60px rgba(13,27,46,.16);
+      --transition: .2s cubic-bezier(.4,0,.2,1);
     }
 
-    /* ── Navigation ─────────────────────────────────────────────── */
-    nav {
-      background: var(--bleu);
-      padding: 0 5%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 8px rgba(0,0,0,.3);
-    }
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 0;
-    }
-    .nav-logo span {
-      color: white;
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: .5px;
-    }
-    .nav-logo small {
-      display: block;
-      color: #aac4ee;
-      font-size: .72rem;
-      font-weight: 400;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 28px;
-    }
-    nav ul a {
-      color: #cde;
-      font-size: .92rem;
-      transition: color .2s;
-    }
-    nav ul a:hover { color: var(--accent); }
+    /* ═══════════════════════════════════════════════════════
+       UTILITAIRES
+    ═══════════════════════════════════════════════════════ */
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .section    { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
 
-    /* ── Hero ───────────────────────────────────────────────────── */
-    .hero {
-      background: linear-gradient(135deg, var(--bleu) 60%, var(--bleu-clair));
-      color: white;
-      padding: 80px 5% 90px;
-      text-align: center;
+    .tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary-lt); color: var(--primary);
+      font-size: .78rem; font-weight: 700; letter-spacing: .04em;
+      text-transform: uppercase; border-radius: 99px;
+      padding: 5px 14px;
     }
-    .hero h1 {
-      font-size: 2.6rem;
-      font-weight: 800;
-      letter-spacing: 1px;
+    .tag-cyan  { background: #e0f4fe; color: var(--accent-dk); }
+
+    .section-label { text-align: center; margin-bottom: 16px; }
+    .section-title {
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      font-weight: 800; line-height: 1.2;
+      color: var(--dark); text-align: center;
       margin-bottom: 16px;
     }
-    .hero h1 span { color: var(--accent); }
-    .hero p {
-      font-size: 1.15rem;
-      color: #cde;
-      max-width: 620px;
-      margin: 0 auto 32px;
+    .section-title span { color: var(--primary); }
+    .section-desc {
+      text-align: center; color: var(--muted);
+      font-size: 1.05rem; max-width: 580px;
+      margin: 0 auto 56px;
     }
-    .badge {
-      display: inline-block;
-      background: rgba(255,255,255,.12);
-      border: 1px solid rgba(255,255,255,.25);
-      border-radius: 20px;
-      padding: 4px 14px;
-      font-size: .82rem;
-      color: #cde;
-      margin-bottom: 20px;
-    }
+
     .btn {
-      display: inline-block;
-      padding: 14px 36px;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform .15s, box-shadow .15s;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px; border-radius: var(--radius-sm);
+      font-size: .95rem; font-weight: 700;
+      cursor: pointer; transition: all var(--transition);
+      border: 2px solid transparent; white-space: nowrap;
     }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.25); }
-    .btn-accent  { background: var(--accent); color: white; }
-    .btn-outline { background: transparent; border: 2px solid white; color: white; margin-left: 12px; }
+    .btn-primary {
+      background: var(--primary); color: #fff;
+      box-shadow: 0 4px 14px rgba(26,126,212,.35);
+    }
+    .btn-primary:hover {
+      background: var(--primary-dk);
+      box-shadow: 0 6px 20px rgba(26,126,212,.45);
+      transform: translateY(-1px);
+    }
+    .btn-accent {
+      background: var(--accent); color: #fff;
+      box-shadow: 0 4px 14px rgba(0,196,140,.35);
+    }
+    .btn-accent:hover {
+      background: var(--accent-dk);
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background: transparent; color: #fff;
+      border-color: rgba(255,255,255,.5);
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,.12);
+      border-color: #fff;
+    }
+    .btn-ghost {
+      background: transparent; color: var(--primary);
+      border-color: var(--border);
+    }
+    .btn-ghost:hover { background: var(--primary-lt); border-color: var(--primary); }
 
-    /* ── Sections communes ──────────────────────────────────────── */
-    section { padding: 70px 5%; }
-    .section-title {
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--bleu);
-      margin-bottom: 10px;
+    /* ═══════════════════════════════════════════════════════
+       NAVIGATION
+    ═══════════════════════════════════════════════════════ */
+    .nav-wrap {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
     }
-    .section-sub {
-      text-align: center;
-      color: #666;
-      margin-bottom: 48px;
-      font-size: .97rem;
+    .nav-inner {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      height: 68px;
     }
-
-    /* ── Fonctionnalités ────────────────────────────────────────── */
-    .features { background: white; }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 28px;
+    .nav-brand {
+      display: flex; align-items: center; gap: 12px;
     }
-    .feature-card {
-      background: var(--gris);
-      border-radius: 10px;
-      padding: 28px 24px;
-      border-top: 4px solid var(--bleu-clair);
-      transition: box-shadow .2s;
+    .nav-brand img {
+      width: 42px; height: 42px; border-radius: 50%;
+      object-fit: cover; border: 2px solid var(--border);
     }
-    .feature-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.1); }
-    .feature-icon {
-      font-size: 2rem;
-      margin-bottom: 12px;
+    .nav-brand-text strong {
+      display: block; font-size: 1rem; font-weight: 800;
+      color: var(--dark); letter-spacing: -.01em;
     }
-    .feature-card h3 {
-      font-size: 1.05rem;
-      color: var(--bleu);
-      margin-bottom: 8px;
+    .nav-brand-text small {
+      font-size: .72rem; color: var(--muted); font-weight: 500;
     }
-    .feature-card p {
-      font-size: .88rem;
-      color: #555;
-    }
-
-    /* ── Conformité légale ──────────────────────────────────────── */
-    .legal { background: var(--gris); }
-    .legal-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      justify-content: center;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .legal-badge {
-      background: white;
-      border: 2px solid var(--bleu);
-      color: var(--bleu);
-      border-radius: 8px;
-      padding: 10px 20px;
-      font-weight: 600;
-      font-size: .9rem;
-    }
-
-    /* ── Tarification ───────────────────────────────────────────── */
-    .pricing { background: white; }
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 28px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    .pricing-card {
-      border: 2px solid #dde;
-      border-radius: 12px;
-      padding: 36px 28px;
-      text-align: center;
-      position: relative;
-      background: white;
-    }
-    .pricing-card.popular {
-      border-color: var(--bleu-clair);
-      box-shadow: 0 8px 32px rgba(37,99,168,.18);
-    }
-    .popular-badge {
-      position: absolute;
-      top: -14px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--accent);
-      color: white;
-      font-size: .78rem;
-      font-weight: 700;
-      padding: 4px 16px;
-      border-radius: 20px;
-    }
-    .pricing-card h3 {
-      font-size: 1.1rem;
-      color: var(--bleu);
-      margin-bottom: 8px;
-    }
-    .price {
-      font-size: 2.4rem;
-      font-weight: 800;
-      color: var(--bleu);
-      margin: 16px 0 4px;
-    }
-    .price sup { font-size: 1rem; vertical-align: super; }
-    .price-period { color: #888; font-size: .85rem; margin-bottom: 24px; }
-    .pricing-features {
+    .nav-links {
+      display: flex; align-items: center; gap: 4px;
       list-style: none;
-      text-align: left;
-      margin-bottom: 28px;
     }
-    .pricing-features li {
-      padding: 6px 0;
-      font-size: .9rem;
-      color: #444;
-      border-bottom: 1px solid #f0f0f0;
+    .nav-links a {
+      padding: 8px 14px; border-radius: var(--radius-sm);
+      font-size: .9rem; font-weight: 500; color: var(--mid);
+      transition: all var(--transition);
     }
-    .pricing-features li::before {
-      content: "✔  ";
-      color: #2a9d2a;
-      font-weight: 700;
+    .nav-links a:hover { background: var(--bg-soft); color: var(--primary); }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+    /* ═══════════════════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════════════════ */
+    .hero {
+      background: linear-gradient(135deg, #0D1B2E 0%, #1A7ED4 60%, #1464AA 100%);
+      padding: 100px 0 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-inner {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+    }
+    .hero-flag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+      border-radius: 99px; padding: 6px 16px;
+      font-size: .82rem; color: rgba(255,255,255,.85);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900; line-height: 1.15;
+      color: #fff; margin-bottom: 20px;
+      letter-spacing: -.02em;
+    }
+    .hero h1 span {
+      background: linear-gradient(90deg, #29B6F6, #81D4FA);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      font-size: 1.05rem; color: rgba(255,255,255,.75);
+      margin-bottom: 36px; line-height: 1.7; max-width: 520px;
+    }
+    .hero-desc strong { color: #fff; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .hero-trust {
+      display: flex; align-items: center; gap: 10px;
+      margin-top: 28px; flex-wrap: wrap;
+    }
+    .hero-trust-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: .8rem; color: rgba(255,255,255,.65);
+    }
+    .hero-trust-item::before {
+      content: '✓'; color: var(--accent);
+      font-weight: 800; font-size: .85rem;
     }
 
-    /* ── Comment commander ──────────────────────────────────────── */
-    .how { background: var(--gris); }
-    .steps {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-      counter-reset: step;
+    /* Mockup côté droit */
+    .hero-visual {
+      position: relative;
     }
-    .step {
-      background: white;
-      border-radius: 10px;
-      padding: 28px 24px;
-      width: 200px;
+    .hero-mockup {
+      background: #1e293b;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,.5);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .mock-bar {
+      background: #0D1B2E;
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .mock-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .mock-title { color: #5A7A9A; font-size: .78rem; margin-left: 8px; }
+    .mock-menu {
+      background: #1e293b;
+      border-bottom: 1px solid #1E3A5F;
+      padding: 8px 14px;
+      display: flex; gap: 18px;
+    }
+    .mock-menu span {
+      font-size: .75rem; color: #94a3b8;
+      cursor: pointer; padding: 2px 4px;
+    }
+    .mock-menu span.active { color: #60a5fa; font-weight: 600; }
+    .mock-body { padding: 14px; }
+    .mock-stats {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin-bottom: 10px;
+    }
+    .mock-stat {
+      background: #0D1B2E;
+      border-radius: 8px; padding: 12px 14px;
+      border-left: 3px solid var(--primary);
+    }
+    .mock-stat.green { border-color: var(--accent); }
+    .mock-stat.orange { border-color: #f59e0b; }
+    .mock-stat label { font-size: .7rem; color: #5A7A9A; display: block; margin-bottom: 4px; }
+    .mock-stat .num { font-size: 1.1rem; font-weight: 800; color: #f1f5f9; }
+    .mock-table {
+      background: #0D1B2E;
+      border-radius: 8px; padding: 12px 14px;
+    }
+    .mock-table h4 { font-size: .75rem; color: #94a3b8; margin-bottom: 8px; font-weight: 600; }
+    .mock-row {
+      display: grid; grid-template-columns: 2fr 1fr 1fr;
+      font-size: .7rem; color: #94a3b8;
+      padding: 5px 0; border-bottom: 1px solid #1e293b;
+    }
+    .mock-row.hd { color: #60a5fa; font-weight: 700; font-size: .68rem; }
+    .mock-row .ok { color: var(--accent); font-weight: 700; }
+
+    /* Badge flottant */
+    .hero-badge {
+      position: absolute; top: -14px; right: -14px;
+      background: var(--accent); color: #fff;
+      border-radius: var(--radius-md);
+      padding: 12px 18px;
+      box-shadow: 0 8px 24px rgba(0,196,140,.45);
+      font-size: .82rem; font-weight: 700;
+      text-align: center; line-height: 1.4;
+    }
+    .hero-badge strong { font-size: 1.4rem; display: block; }
+
+    /* ═══════════════════════════════════════════════════════
+       BANDE STATISTIQUES
+    ═══════════════════════════════════════════════════════ */
+    .stats-band {
+      background: var(--dark);
+      padding: 48px 0;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .stat-item {
       text-align: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,.07);
+      padding: 24px;
+      border-right: 1px solid rgba(255,255,255,.1);
     }
-    .step-num {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--bleu);
-      color: white;
-      font-size: 1.2rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 14px;
-    }
-    .step h4 { font-size: .95rem; color: var(--bleu); margin-bottom: 6px; }
-    .step p  { font-size: .82rem; color: #666; }
-
-    /* ── Formulaire de commande ─────────────────────────────────── */
-    .order { background: white; }
-    .order-form {
-      max-width: 580px;
-      margin: 0 auto;
-      background: var(--gris);
-      border-radius: 14px;
-      padding: 40px 36px;
-      box-shadow: 0 4px 20px rgba(0,0,0,.08);
-    }
-    .form-group { margin-bottom: 18px; }
-    label {
-      display: block;
-      font-size: .88rem;
-      font-weight: 600;
-      color: var(--bleu);
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-size: 2.4rem; font-weight: 900;
+      color: #fff; line-height: 1;
       margin-bottom: 6px;
     }
-    input, select, textarea {
-      width: 100%;
-      padding: 11px 14px;
-      border: 1.5px solid #ccd;
-      border-radius: 6px;
-      font-size: .95rem;
-      font-family: inherit;
-      background: white;
-      transition: border-color .2s;
-    }
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--bleu-clair);
-    }
-    textarea { resize: vertical; min-height: 90px; }
-    .btn-submit {
-      width: 100%;
-      padding: 14px;
-      background: var(--bleu);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background .2s;
-    }
-    .btn-submit:hover { background: var(--bleu-clair); }
-    .form-note {
-      text-align: center;
-      color: #888;
-      font-size: .8rem;
-      margin-top: 14px;
-    }
+    .stat-num span { color: var(--accent); }
+    .stat-label { font-size: .85rem; color: #94a3b8; font-weight: 500; }
 
-    /* ── Contact rapide ─────────────────────────────────────────── */
-    .contact-bar {
-      background: var(--bleu);
-      color: white;
-      padding: 32px 5%;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 24px;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-    .contact-item { font-size: .95rem; }
-    .contact-item strong { display: block; color: var(--accent); font-size: 1.05rem; }
-
-    /* ── Footer ─────────────────────────────────────────────────── */
-    footer {
-      background: #111827;
-      color: #9ca3af;
-      text-align: center;
-      padding: 24px 5%;
-      font-size: .85rem;
-    }
-    footer strong { color: white; }
-
-    /* ── WhatsApp flottant ───────────────────────────────────────── */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      z-index: 999;
-      background: #25d366;
-      color: white;
-      border-radius: 50px;
-      padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      font-size: .95rem;
-      box-shadow: 0 4px 20px rgba(37,211,102,.5);
-      transition: transform .2s, box-shadow .2s;
-      text-decoration: none;
-    }
-    .whatsapp-float:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 28px rgba(37,211,102,.6);
-    }
-    .whatsapp-float svg { width: 26px; height: 26px; fill: white; }
-
-    /* ── Mockup app ──────────────────────────────────────────────── */
-    .screenshot { background: var(--bleu); padding: 60px 5%; }
-    .mockup-window {
-      max-width: 820px;
-      margin: 0 auto;
-      background: #f0f2f5;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 24px 60px rgba(0,0,0,.5);
-    }
-    .mockup-titlebar {
-      background: #1a3a6e;
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .mockup-dot { width:12px; height:12px; border-radius:50%; }
-    .mockup-title { color: #aac4ee; font-size:.85rem; margin-left:8px; }
-    .mockup-body { padding: 16px; }
-    .mockup-menu {
-      background: #e8eaf0;
-      border-bottom: 1px solid #ccc;
-      padding: 6px 12px;
-      display: flex;
-      gap: 20px;
-      font-size: .8rem;
-      color: #333;
-    }
-    .mockup-content {
+    /* ═══════════════════════════════════════════════════════
+       POUR QUI
+    ═══════════════════════════════════════════════════════ */
+    .audience { background: var(--bg-soft); }
+    .audience-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      padding: 16px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
     }
-    .mockup-card {
-      background: white;
-      border-radius: 8px;
-      padding: 14px;
-      border-left: 4px solid var(--bleu-clair);
+    .audience-card {
+      background: #fff;
+      border-radius: var(--radius-md);
+      padding: 36px 28px;
+      border: 1px solid var(--border);
+      transition: all var(--transition);
+      position: relative; overflow: hidden;
     }
-    .mockup-card h4 { font-size: .8rem; color: #888; margin-bottom: 6px; }
-    .mockup-card .val { font-size: 1.4rem; font-weight: 800; color: var(--bleu); }
-    .mockup-table {
-      background: white;
-      border-radius: 8px;
-      padding: 14px;
-      grid-column: span 2;
+    .audience-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--primary);
+      transform: scaleX(0);
+      transition: transform var(--transition);
+      transform-origin: left;
     }
-    .mockup-table h4 { font-size: .85rem; color: var(--bleu); margin-bottom: 10px; font-weight: 700; }
-    .mockup-row {
+    .audience-card:hover::before { transform: scaleX(1); }
+    .audience-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+    .audience-icon {
+      width: 56px; height: 56px;
+      background: var(--primary-lt);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+    }
+    .audience-card h3 {
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--dark); margin-bottom: 10px;
+    }
+    .audience-card p { font-size: .9rem; color: var(--muted); }
+    .audience-card ul {
+      list-style: none; margin-top: 16px;
+    }
+    .audience-card ul li {
+      font-size: .87rem; color: var(--mid);
+      padding: 4px 0;
+    }
+    .audience-card ul li::before {
+      content: '→ '; color: var(--accent); font-weight: 700;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       FONCTIONNALITÉS
+    ═══════════════════════════════════════════════════════ */
+    .features { background: #fff; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .feature-card {
+      padding: 28px 24px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #fff;
+      transition: all var(--transition);
+    }
+    .feature-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-lt);
+      transform: translateY(-2px);
+    }
+    .feat-icon {
+      width: 48px; height: 48px;
+      border-radius: var(--radius-sm);
+      background: var(--primary-lt);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 16px;
+    }
+    .feature-card h3 {
+      font-size: 1rem; font-weight: 700;
+      color: var(--dark); margin-bottom: 8px;
+    }
+    .feature-card p { font-size: .87rem; color: var(--muted); }
+
+    /* ═══════════════════════════════════════════════════════
+       CONFORMITÉ
+    ═══════════════════════════════════════════════════════ */
+    .legal {
+      background: linear-gradient(135deg, #0D1B2E, #1A7ED4 80%);
+      padding: 80px 0;
+    }
+    .legal .section-title { color: #fff; }
+    .legal .section-desc { color: rgba(255,255,255,.7); }
+    .legal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .legal-item {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: var(--radius-sm);
+      padding: 20px 18px;
+      text-align: center;
+      transition: all var(--transition);
+    }
+    .legal-item:hover {
+      background: rgba(255,255,255,.14);
+      transform: translateY(-2px);
+    }
+    .legal-item .legal-icon { font-size: 1.6rem; margin-bottom: 10px; }
+    .legal-item h4 {
+      font-size: .88rem; font-weight: 700;
+      color: #fff; margin-bottom: 6px;
+    }
+    .legal-item p { font-size: .78rem; color: rgba(255,255,255,.6); }
+
+    /* ═══════════════════════════════════════════════════════
+       TÉMOIGNAGES
+    ═══════════════════════════════════════════════════════ */
+    .testimonials { background: var(--bg-soft); }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testi-card {
+      background: #fff;
+      border-radius: var(--radius-md);
+      padding: 32px 28px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+    .testi-card::before {
+      content: '"';
+      position: absolute; top: 16px; left: 20px;
+      font-size: 4rem; line-height: 1;
+      color: var(--primary-lt);
+      font-family: Georgia, serif;
+    }
+    .testi-stars { color: #f59e0b; font-size: .9rem; margin-bottom: 14px; }
+    .testi-text {
+      font-size: .92rem; color: var(--mid);
+      font-style: italic; margin-bottom: 20px;
+      line-height: 1.7; padding-top: 10px;
+    }
+    .testi-author {
+      display: flex; align-items: center; gap: 12px;
+      border-top: 1px solid var(--border); padding-top: 16px;
+    }
+    .testi-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--primary); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .testi-name { font-weight: 700; font-size: .9rem; color: var(--dark); }
+    .testi-role { font-size: .78rem; color: var(--muted); }
+
+    /* ═══════════════════════════════════════════════════════
+       TARIFS
+    ═══════════════════════════════════════════════════════ */
+    .pricing { background: #fff; }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px; max-width: 960px;
+      margin: 0 auto 60px;
+    }
+    .plan-card {
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 36px 28px;
+      background: #fff;
+      position: relative;
+      transition: all var(--transition);
+    }
+    .plan-card:hover { box-shadow: var(--shadow-lg); }
+    .plan-card.featured {
+      border-color: var(--primary);
+      background: linear-gradient(180deg, var(--primary-lt) 0%, #fff 40%);
+    }
+    .plan-popular {
+      position: absolute; top: -13px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary); color: #fff;
+      font-size: .73rem; font-weight: 800;
+      padding: 4px 18px; border-radius: 99px;
+      letter-spacing: .04em; text-transform: uppercase;
+    }
+    .plan-name {
+      font-size: .88rem; font-weight: 700;
+      color: var(--muted); text-transform: uppercase;
+      letter-spacing: .06em; margin-bottom: 8px;
+    }
+    .plan-price {
+      font-size: 2.6rem; font-weight: 900;
+      color: var(--dark); line-height: 1;
+      margin-bottom: 4px;
+    }
+    .plan-price sup { font-size: .9rem; font-weight: 600; vertical-align: super; }
+    .plan-period { font-size: .82rem; color: var(--muted); margin-bottom: 24px; }
+    .plan-divider {
+      height: 1px; background: var(--border); margin: 20px 0;
+    }
+    .plan-features { list-style: none; margin-bottom: 28px; }
+    .plan-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: .88rem; color: var(--mid);
+      padding: 6px 0;
+    }
+    .plan-features li::before {
+      content: '✓';
+      color: var(--accent); font-weight: 800;
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    .addons-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px; max-width: 860px; margin: 0 auto;
+    }
+    .addon-card {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px 16px; text-align: center;
+    }
+    .addon-card .addon-icon { font-size: 1.6rem; margin-bottom: 8px; }
+    .addon-card h4 { font-size: .85rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    .addon-card .addon-price { font-size: 1rem; font-weight: 800; color: var(--primary); }
+
+    /* ═══════════════════════════════════════════════════════
+       PROCESSUS
+    ═══════════════════════════════════════════════════════ */
+    .process { background: var(--bg-soft); }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0; position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute; top: 28px; left: 10%; right: 10%;
+      height: 2px; background: var(--border);
+    }
+    .process-step { text-align: center; padding: 0 16px; }
+    .step-bubble {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff; font-weight: 900;
+      font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      position: relative; z-index: 1;
+      box-shadow: 0 4px 14px rgba(26,126,212,.35);
+    }
+    .process-step h4 {
+      font-size: .95rem; font-weight: 700;
+      color: var(--dark); margin-bottom: 8px;
+    }
+    .process-step p { font-size: .82rem; color: var(--muted); }
+
+    /* ═══════════════════════════════════════════════════════
+       CTA CENTRAL
+    ═══════════════════════════════════════════════════════ */
+    .cta-block {
+      background: linear-gradient(135deg, var(--accent-dk), var(--accent));
+      padding: 80px 0;
+      text-align: center;
+    }
+    .cta-block h2 {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 900; color: #fff;
+      margin-bottom: 14px;
+    }
+    .cta-block p { color: rgba(255,255,255,.85); margin-bottom: 32px; font-size: 1.05rem; }
+    .cta-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .btn-white {
+      background: #fff; color: var(--accent-dk);
+      font-weight: 800;
+    }
+    .btn-white:hover { background: var(--dark); color: #fff; }
+
+    /* ═══════════════════════════════════════════════════════
+       FORMULAIRE DE COMMANDE
+    ═══════════════════════════════════════════════════════ */
+    .order { background: var(--bg-soft); }
+    .order-wrap {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: start;
+    }
+    .order-info h2 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800; color: var(--dark);
+      margin-bottom: 16px;
+    }
+    .order-info p { color: var(--muted); margin-bottom: 28px; }
+    .order-benefits { list-style: none; }
+    .order-benefits li {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+      font-size: .92rem; color: var(--mid);
+    }
+    .order-benefits li span.icon {
+      color: var(--accent); font-size: 1.1rem; flex-shrink: 0;
+    }
+    .order-form-box {
+      background: #fff; border-radius: var(--radius-lg);
+      padding: 40px 36px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+    }
+    .order-form-box h3 {
+      font-size: 1.3rem; font-weight: 800;
+      color: var(--dark); margin-bottom: 24px;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block; font-size: .82rem;
+      font-weight: 600; color: var(--mid);
+      margin-bottom: 6px; text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: .95rem; font-family: inherit;
+      background: var(--bg-soft);
+      transition: border-color var(--transition);
+      color: var(--dark);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none; border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 3px var(--primary-lt);
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .btn-submit {
+      width: 100%; padding: 14px;
+      background: var(--primary); color: #fff;
+      border: none; border-radius: var(--radius-sm);
+      font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: all var(--transition);
+      font-family: inherit;
+    }
+    .btn-submit:hover { background: var(--primary-dk); transform: translateY(-1px); }
+    .form-note {
+      text-align: center; color: var(--muted);
+      font-size: .78rem; margin-top: 12px;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       CONTACT BAR
+    ═══════════════════════════════════════════════════════ */
+    .contact-bar {
+      background: var(--dark);
+      padding: 40px 0;
+    }
+    .contact-items {
+      display: flex; justify-content: center;
+      gap: 40px; flex-wrap: wrap;
+    }
+    .contact-item {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .contact-item-icon {
+      width: 44px; height: 44px;
+      background: rgba(255,255,255,.08);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .contact-item-label { font-size: .75rem; color: #5A7A9A; font-weight: 500; text-transform: uppercase; }
+    .contact-item-val { font-size: .95rem; color: #fff; font-weight: 600; }
+
+    /* ═══════════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════════ */
+    footer {
+      background: #020617;
+      padding: 56px 0 32px;
+    }
+    .footer-grid {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr 1fr;
-      font-size: .78rem;
-      padding: 6px 0;
-      border-bottom: 1px solid #f0f0f0;
-      color: #444;
+      gap: 40px; margin-bottom: 48px;
     }
-    .mockup-row.header { font-weight: 700; color: var(--bleu); background: #f5f7fa; padding: 8px 0; border-radius: 4px; }
+    .footer-brand strong {
+      display: block; color: #fff;
+      font-size: 1.05rem; font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .footer-brand p {
+      font-size: .83rem; color: #5A7A9A; line-height: 1.7;
+      max-width: 280px;
+    }
+    .footer-col h4 {
+      color: #94a3b8; font-size: .75rem;
+      font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul a {
+      color: #5A7A9A; font-size: .87rem;
+      transition: color var(--transition);
+    }
+    .footer-col ul a:hover { color: #fff; }
+    .footer-bottom {
+      border-top: 1px solid #1e293b;
+      padding-top: 24px;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { font-size: .8rem; color: #475569; }
+    .footer-version {
+      font-size: .75rem; color: #1E3A5F;
+      background: #0D1B2E; padding: 4px 12px;
+      border-radius: 99px;
+    }
 
-    /* ── Responsive ──────────────────────────────────────────────── */
-    @media (max-width: 600px) {
-      .hero h1 { font-size: 1.8rem; }
-      .btn-outline { display: none; }
-      nav ul { display: none; }
-      .order-form { padding: 24px 18px; }
+    /* ═══════════════════════════════════════════════════════
+       WHATSAPP FLOTTANT
+    ═══════════════════════════════════════════════════════ */
+    .wa-float {
+      position: fixed; bottom: 28px; right: 28px;
+      z-index: 999;
+      background: #25d366; color: #fff;
+      border-radius: 99px; padding: 13px 22px;
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 700; font-size: .9rem;
+      box-shadow: 0 4px 20px rgba(37,211,102,.55);
+      transition: all var(--transition);
+    }
+    .wa-float:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(37,211,102,.7);
+    }
+    .wa-float svg { width: 24px; height: 24px; fill: #fff; }
+
+    /* ═══════════════════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp .6s ease both; }
+    .fade-up-2 { animation: fadeUp .6s .15s ease both; }
+    .fade-up-3 { animation: fadeUp .6s .3s ease both; }
+
+    /* ═══════════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .hero-inner       { grid-template-columns: 1fr; }
+      .hero-visual      { display: none; }
+      .features-grid    { grid-template-columns: repeat(2, 1fr); }
+      .legal-grid       { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid{ grid-template-columns: repeat(2, 1fr); }
+      .pricing-grid     { grid-template-columns: 1fr; max-width: 420px; }
+      .addons-grid      { grid-template-columns: repeat(2, 1fr); }
+      .process-steps    { grid-template-columns: repeat(2, 1fr); }
+      .process-steps::before { display: none; }
+      .order-wrap       { grid-template-columns: 1fr; }
+      .footer-grid      { grid-template-columns: 1fr 1fr; }
+      .audience-grid    { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .section            { padding: 64px 0; }
+      .nav-links          { display: none; }
+      .stats-grid         { grid-template-columns: repeat(2, 1fr); }
+      .stat-item          { border-right: none; border-bottom: 1px solid rgba(255,255,255,.1); }
+      .features-grid      { grid-template-columns: 1fr; }
+      .legal-grid         { grid-template-columns: 1fr; }
+      .testimonials-grid  { grid-template-columns: 1fr; }
+      .form-row           { grid-template-columns: 1fr; }
+      .order-form-box     { padding: 28px 20px; }
+      .footer-grid        { grid-template-columns: 1fr; }
+      .contact-items      { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .hero-actions       { flex-direction: column; }
+      .audience-grid      { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══ NAVIGATION ══════════════════════════════════════════════════ -->
-<nav>
-  <div class="nav-logo">
-    <img src="logo_csc.png" alt="CSC SOLCOM" style="height:48px;width:48px;object-fit:cover;border-radius:50%;background:white;padding:2px;" />
-    <div>
-      <span>REVO-LUTION Paie</span>
-      <small>Ets. Solution Comptable</small>
-    </div>
-  </div>
-  <ul>
-    <li><a href="#fonctionnalites">Fonctionnalités</a></li>
-    <li><a href="#tarifs">Tarifs</a></li>
-    <li><a href="#commander">Commander</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
-
-<!-- ══ HERO ════════════════════════════════════════════════════════ -->
-<section class="hero">
-  <img src="logo_csc.png" alt="CSC SOLCOM" style="height:150px;width:150px;object-fit:cover;border-radius:50%;background:white;padding:6px;margin-bottom:20px;box-shadow:0 8px 24px rgba(0,0,0,0.4);" /><br>
-  <div class="badge">&#127464;&#127467; Conçu spécialement pour la République Centrafricaine</div>
-  <h1>La paie de vos employés,<br><span>simplifiée et conforme</span></h1>
-  <p>
-    REVO-LUTION Paie est le premier logiciel de gestion de la paie entièrement
-    adapté au Code du travail RCA, au CSS-RCA et au Code Général des Impôts.
-    Édité par <strong style="color:var(--accent)">Ets. Solution Comptable</strong> — Bangui, RCA.
-  </p>
-  <a href="#commander" class="btn btn-accent">Commander maintenant</a>
-  <a href="#fonctionnalites" class="btn btn-outline">Découvrir</a>
-</section>
-
-<!-- ══ FONCTIONNALITÉS ═════════════════════════════════════════════ -->
-<section class="features" id="fonctionnalites">
-  <h2 class="section-title">Tout ce dont vous avez besoin</h2>
-  <p class="section-sub">Un logiciel complet, pensé pour les entreprises centrafricaines</p>
-  <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon">&#128179;</div>
-      <h3>Traitement des salaires</h3>
-      <p>Calcul automatique des salaires mensuels, primes, avantages, heures supplémentaires et déductions.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">&#128196;</div>
-      <h3>Bulletins de paie</h3>
-      <p>Génération et impression des bulletins de paie conformes aux exigences légales RCA.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">&#127970;</div>
-      <h3>Déclarations CNSS</h3>
-      <p>Bordereau de déclaration mensuelle CNSS et attestations de prise en charge automatisés.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">&#128202;</div>
-      <h3>Déclaration IRPP</h3>
-      <p>Déclaration fiscale annuelle IRPP générée automatiquement selon le CGI-RCA.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">&#128101;</div>
-      <h3>Gestion du personnel</h3>
-      <p>Registre des employés, congés payés, absences, avances et acomptes sur salaire.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">&#128274;</div>
-      <h3>Sécurité & rôles</h3>
-      <p>Gestion des utilisateurs avec niveaux d'accès (admin, RH, comptable) et sauvegarde automatique.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">&#128200;</div>
-      <h3>Rapports & analyses</h3>
-      <p>Livre de paie, rapport mensuel, statistiques des heures travaillées et analyse des coûts.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">&#128196;</div>
-      <h3>Documents RH</h3>
-      <p>Attestation de salaire, certificat de travail, solde de tout compte générés en PDF.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ══ CONFORMITÉ LÉGALE ═══════════════════════════════════════════ -->
-<section class="legal">
-  <h2 class="section-title">100 % conforme à la législation RCA</h2>
-  <p class="section-sub">Mise à jour selon les textes en vigueur</p>
-  <div class="legal-list">
-    <div class="legal-badge">Code du travail RCA</div>
-    <div class="legal-badge">CSS-RCA (CNSS)</div>
-    <div class="legal-badge">Code Général des Impôts</div>
-    <div class="legal-badge">SMIG en vigueur</div>
-    <div class="legal-badge">IRPP & retenues fiscales</div>
-    <div class="legal-badge">Grille salariale officielle</div>
-  </div>
-</section>
-
-<!-- ══ TARIFICATION ════════════════════════════════════════════════ -->
-<section class="pricing" id="tarifs">
-  <h2 class="section-title">Tarifs</h2>
-  <p class="section-sub">Licence monoposte — paiement unique, sans abonnement mensuel</p>
-  <div class="pricing-grid">
-    <div class="pricing-card">
-      <h3>TPE / Association</h3>
-      <div class="price"><sup>FCFA </sup>75 000</div>
-      <div class="price-period">1 – 10 employés · licence permanente</div>
-      <ul class="pricing-features">
-        <li>1 poste de travail</li>
-        <li>Toutes les fonctionnalités</li>
-        <li>Mises à jour 1 an incluses</li>
-        <li>Support par WhatsApp</li>
+<!-- ══════════════════════════════════════════════════════════════
+     NAVIGATION
+══════════════════════════════════════════════════════════════ -->
+<div class="nav-wrap">
+  <div class="container">
+    <nav class="nav-inner">
+      <div class="nav-brand">
+        <img src="logo_csc.png" alt="CSC" />
+        <div class="nav-brand-text">
+          <strong>REVO-LUTION Paie</strong>
+          <small>Ets. Solution Comptable — Bangui, RCA</small>
+        </div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+        <li><a href="#conformite">Conformité</a></li>
+        <li><a href="#temoignages">Témoignages</a></li>
+        <li><a href="#tarifs">Tarifs</a></li>
+        <li><a href="#commander">Commander</a></li>
       </ul>
-      <a href="#commander" class="btn btn-outline" style="border-color:var(--bleu);color:var(--bleu);display:block;text-align:center;">Commander</a>
-    </div>
-    <div class="pricing-card popular">
-      <div class="popular-badge">Le plus choisi</div>
-      <h3>PME / Cabinet</h3>
-      <div class="price"><sup>FCFA </sup>120 000</div>
-      <div class="price-period">11 – 50 employés · licence permanente</div>
-      <ul class="pricing-features">
-        <li>1 poste de travail</li>
-        <li>Toutes les fonctionnalités</li>
-        <li>Mises à jour 2 ans incluses</li>
-        <li>Support prioritaire WhatsApp</li>
-        <li>Formation à domicile (Bangui)</li>
-      </ul>
-      <a href="#commander" class="btn btn-accent" style="display:block;text-align:center;">Commander</a>
-    </div>
-    <div class="pricing-card">
-      <h3>Grande entreprise</h3>
-      <div class="price"><sup>FCFA </sup>200 000</div>
-      <div class="price-period">50+ employés · licence permanente</div>
-      <ul class="pricing-features">
-        <li>1 poste de travail</li>
-        <li>Toutes les fonctionnalités</li>
-        <li>Mises à jour 2 ans incluses</li>
-        <li>Support dédié</li>
-        <li>Formation incluse (Bangui)</li>
-      </ul>
-      <a href="#commander" class="btn btn-outline" style="border-color:var(--bleu);color:var(--bleu);display:block;text-align:center;">Commander</a>
-    </div>
-  </div>
-
-  <!-- Services complémentaires -->
-  <div style="max-width:700px;margin:48px auto 0;">
-    <h3 style="text-align:center;color:var(--bleu);margin-bottom:20px;">Services complémentaires</h3>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;">
-      <div style="background:var(--gris);border-radius:8px;padding:16px;text-align:center;">
-        <div style="font-size:1.5rem;">&#128272;</div>
-        <div style="font-weight:700;color:var(--bleu);margin:6px 0 4px;">Poste supplémentaire</div>
-        <div style="font-size:1.1rem;font-weight:800;color:var(--bleu-clair);">40 000 FCFA</div>
+      <div class="nav-actions">
+        <a href="#commander" class="btn btn-primary">Demander une démo</a>
       </div>
-      <div style="background:var(--gris);border-radius:8px;padding:16px;text-align:center;">
-        <div style="font-size:1.5rem;">&#128260;</div>
-        <div style="font-weight:700;color:var(--bleu);margin:6px 0 4px;">Maintenance annuelle</div>
-        <div style="font-size:1.1rem;font-weight:800;color:var(--bleu-clair);">20 000 FCFA/an</div>
-      </div>
-      <div style="background:var(--gris);border-radius:8px;padding:16px;text-align:center;">
-        <div style="font-size:1.5rem;">&#127979;</div>
-        <div style="font-weight:700;color:var(--bleu);margin:6px 0 4px;">Formation</div>
-        <div style="font-size:1.1rem;font-weight:800;color:var(--bleu-clair);">25 000 FCFA</div>
-      </div>
-      <div style="background:var(--gris);border-radius:8px;padding:16px;text-align:center;">
-        <div style="font-size:1.5rem;">&#128257;</div>
-        <div style="font-weight:700;color:var(--bleu);margin:6px 0 4px;">Réactivation (nouveau PC)</div>
-        <div style="font-size:1.1rem;font-weight:800;color:var(--bleu-clair);">15 000 FCFA</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ APERÇU DE L'APPLICATION ════════════════════════════════════ -->
-<section class="screenshot">
-  <h2 class="section-title" style="color:white;">L'interface du logiciel</h2>
-  <p class="section-sub" style="color:#aac4ee;">Simple, claire et adaptée à votre quotidien</p>
-  <div class="mockup-window">
-    <div class="mockup-titlebar">
-      <div class="mockup-dot" style="background:#ff5f57;"></div>
-      <div class="mockup-dot" style="background:#ffbd2e;"></div>
-      <div class="mockup-dot" style="background:#28c840;"></div>
-      <span class="mockup-title">Gestion RH — REVO-LUTION Paie v1.0.4</span>
-    </div>
-    <div class="mockup-menu">
-      <span>Fichier</span><span>Structure</span><span>Traitement</span>
-      <span>États</span><span>Analyse</span><span>Configuration</span><span>Aide</span>
-    </div>
-    <div class="mockup-body">
-      <div class="mockup-content">
-        <div class="mockup-card">
-          <h4>Total employés</h4>
-          <div class="val">24</div>
-        </div>
-        <div class="mockup-card">
-          <h4>Masse salariale (mois)</h4>
-          <div class="val" style="font-size:1.1rem;">4 820 000 FCFA</div>
-        </div>
-        <div class="mockup-card">
-          <h4>Cotisations CNSS</h4>
-          <div class="val" style="font-size:1.1rem;">722 000 FCFA</div>
-        </div>
-        <div class="mockup-card">
-          <h4>Bulletins générés</h4>
-          <div class="val">24 / 24</div>
-        </div>
-        <div class="mockup-table">
-          <h4>Liste du personnel — Mars 2025</h4>
-          <div class="mockup-row header">
-            <span>Employé</span><span>Salaire brut</span><span>CNSS</span><span>Net à payer</span>
-          </div>
-          <div class="mockup-row">
-            <span>NGATCHOU Jean-Paul</span><span>250 000</span><span>19 500</span><span>217 800</span>
-          </div>
-          <div class="mockup-row">
-            <span>KETTE Marie-Claire</span><span>180 000</span><span>14 040</span><span>154 700</span>
-          </div>
-          <div class="mockup-row">
-            <span>DOZOUA Patrice</span><span>320 000</span><span>24 960</span><span>279 500</span>
-          </div>
-          <div class="mockup-row" style="color:#888;font-style:italic;">
-            <span>21 autres employés…</span><span></span><span></span><span></span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ COMMENT COMMANDER ═══════════════════════════════════════════ -->
-<section class="how">
-  <h2 class="section-title">Comment commander ?</h2>
-  <p class="section-sub">4 étapes simples pour démarrer</p>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <h4>Remplissez le formulaire</h4>
-      <p>Donnez-nous vos coordonnées et le type de licence souhaité.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <h4>Effectuez le paiement</h4>
-      <p>Par Mobile Money ou virement bancaire sur nos coordonnées.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <h4>Téléchargez & installez</h4>
-      <p>Vous recevez le lien de téléchargement par WhatsApp ou email.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <h4>Activez la licence</h4>
-      <p>Nous vous envoyons votre clé d'activation personnelle sous 24 h.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ══ FORMULAIRE DE COMMANDE ══════════════════════════════════════ -->
-<section class="order" id="commander">
-  <h2 class="section-title">Passer commande</h2>
-  <p class="section-sub">Remplissez le formulaire — nous vous recontactons sous 24 h</p>
-  <div class="order-form">
-    <form id="waForm" onsubmit="envoyerWhatsApp(event)">
-      <div class="form-group">
-        <label for="nom">Nom complet *</label>
-        <input type="text" id="nom" placeholder="Ex : Jean-Pierre Ngatchou" required />
-      </div>
-      <div class="form-group">
-        <label for="entreprise">Entreprise / Cabinet</label>
-        <input type="text" id="entreprise" placeholder="Ex : Cabinet SOLCOM" />
-      </div>
-      <div class="form-group">
-        <label for="tel">Téléphone / WhatsApp *</label>
-        <input type="tel" id="tel" placeholder="+236 72 07 61 64" required />
-      </div>
-      <div class="form-group">
-        <label for="licence">Type de licence *</label>
-        <select id="licence" required>
-          <option value="">-- Choisissez --</option>
-          <option value="TPE / Association — 75 000 FCFA">TPE / Association — 75 000 FCFA</option>
-          <option value="PME / Cabinet — 120 000 FCFA">PME / Cabinet — 120 000 FCFA</option>
-          <option value="Grande entreprise — 200 000 FCFA">Grande entreprise — 200 000 FCFA</option>
-          <option value="Multi-postes — Sur devis">Multi-postes — Sur devis</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="message">Message (optionnel)</label>
-        <textarea id="message" placeholder="Questions, besoins spécifiques..."></textarea>
-      </div>
-      <button type="submit" class="btn-submit" style="background:#25d366;">
-        &#128232; Envoyer via WhatsApp
-      </button>
-      <p class="form-note">Votre commande sera envoyée directement sur WhatsApp au <strong>+236 72 07 61 64</strong></p>
-    </form>
-  </div>
-  <script>
-  function envoyerWhatsApp(e) {
-    e.preventDefault();
-    var nom       = document.getElementById('nom').value.trim();
-    var entreprise= document.getElementById('entreprise').value.trim();
-    var tel       = document.getElementById('tel').value.trim();
-    var licence   = document.getElementById('licence').value;
-    var msg       = document.getElementById('message').value.trim();
-    var texte =
-      'Bonjour, je souhaite commander REVO-LUTION Paie.\n\n' +
-      'Nom : ' + nom + '\n' +
-      (entreprise ? 'Entreprise : ' + entreprise + '\n' : '') +
-      'Téléphone : ' + tel + '\n' +
-      'Licence : ' + licence + '\n' +
-      (msg ? 'Message : ' + msg : '');
-    var url = 'https://wa.me/23672076164?text=' + encodeURIComponent(texte);
-    window.open(url, '_blank');
-  }
-  </script>
-</section>
-
-<!-- ══ CONTACT RAPIDE ══════════════════════════════════════════════ -->
-<div class="contact-bar" id="contact">
-  <div class="contact-item">
-    <strong>&#128222; Téléphone / WhatsApp</strong>
-    +236 72 07 61 64
-  </div>
-  <div class="contact-item">
-    <strong>&#9993; Email</strong>
-    ngatchousainthardi@gmail.com
-  </div>
-  <div class="contact-item">
-    <strong>&#128205; Adresse</strong>
-    Av. Charles de Gaulle, Abbé, Bangui, RCA
-  </div>
-  <div class="contact-item">
-    <strong>&#128336; Horaires</strong>
-    Lun – Ven : 8h00 – 17h00
-  </div>
-  <div class="contact-item">
-    <strong>&#128196; RCCM</strong>
-    CA/BG/2018 A 1511
+    </nav>
   </div>
 </div>
 
-<!-- ══ FOOTER ══════════════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="fade-up">
+        <div class="hero-flag">🇨🇫 Conçu pour la République Centrafricaine</div>
+        <h1>La paie de vos<br>employés,<br><span>simplifiée.</span></h1>
+        <p class="hero-desc">
+          Le premier logiciel de gestion de la paie entièrement adapté au
+          <strong>Code du travail RCA</strong>, au <strong>CSS-RCA (CNSS)</strong>
+          et au <strong>Code Général des Impôts</strong>. Pour les
+          <strong>entreprises</strong> et les <strong>entités à but non lucratif</strong>.
+        </p>
+        <div class="hero-actions">
+          <a href="#commander" class="btn btn-accent">📥 Télécharger maintenant</a>
+          <a href="#fonctionnalites" class="btn btn-outline">Découvrir les fonctionnalités</a>
+        </div>
+        <div class="hero-trust">
+          <div class="hero-trust-item">SMIG 29 000 FCFA</div>
+          <div class="hero-trust-item">Décret n°21.439</div>
+          <div class="hero-trust-item">IRPP automatique</div>
+          <div class="hero-trust-item">Exonération ONG</div>
+        </div>
+      </div>
+
+      <!-- Mockup application -->
+      <div class="hero-visual fade-up-2">
+        <div style="position:relative;">
+          <div class="hero-badge">
+            <strong>v1.0.5</strong>
+            Dernière version
+          </div>
+          <div class="hero-mockup">
+            <div class="mock-bar">
+              <div class="mock-dot" style="background:#ff5f57;"></div>
+              <div class="mock-dot" style="background:#ffbd2e;"></div>
+              <div class="mock-dot" style="background:#28c840;"></div>
+              <span class="mock-title">Gestion RH — REVO-LUTION Paie v1.0.5</span>
+            </div>
+            <div class="mock-menu">
+              <span>Fichier</span>
+              <span class="active">Structure</span>
+              <span>Traitement</span>
+              <span>États</span>
+              <span>Analyse</span>
+            </div>
+            <div class="mock-body">
+              <div class="mock-stats">
+                <div class="mock-stat">
+                  <label>Total employés</label>
+                  <div class="num">15</div>
+                </div>
+                <div class="mock-stat green">
+                  <label>Masse salariale</label>
+                  <div class="num" style="font-size:.9rem;">3 185 000 FCFA</div>
+                </div>
+                <div class="mock-stat orange">
+                  <label>Cotisations CNSS</label>
+                  <div class="num" style="font-size:.9rem;">477 750 FCFA</div>
+                </div>
+                <div class="mock-stat">
+                  <label>Bulletins générés</label>
+                  <div class="num">15/15</div>
+                </div>
+              </div>
+              <div class="mock-table">
+                <h4>Personnel — Avril 2026</h4>
+                <div class="mock-row hd">
+                  <span>Employé</span><span>Salaire brut</span><span>Net</span>
+                </div>
+                <div class="mock-row">
+                  <span>TOUADERA Aristide</span><span>600 000</span><span class="ok">524 000</span>
+                </div>
+                <div class="mock-row">
+                  <span>NGATCHOU S.-Hardi</span><span>450 000</span><span class="ok">393 000</span>
+                </div>
+                <div class="mock-row">
+                  <span>NKOUNKOU Bertrand</span><span>250 000</span><span class="ok">218 000</span>
+                </div>
+                <div class="mock-row" style="color:#475569;font-style:italic;">
+                  <span>12 autres employés…</span><span></span><span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     BANDE STATISTIQUES
+══════════════════════════════════════════════════════════════ -->
+<div class="stats-band">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-num">583<span>+</span></div>
+        <div class="stat-label">Tests automatisés</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num"><span>29</span> 000</div>
+        <div class="stat-label">FCFA SMIG officiel RCA</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100<span>%</span></div>
+        <div class="stat-label">Conforme CGI & Code du travail</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">3<span> ans</span></div>
+        <div class="stat-label">d'historique salarial RCA</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     POUR QUI
+══════════════════════════════════════════════════════════════ -->
+<section class="audience section" id="pourqui">
+  <div class="container">
+    <div class="section-label"><span class="tag">Pour qui ?</span></div>
+    <h2 class="section-title">Adapté à <span>chaque structure</span></h2>
+    <p class="section-desc">Que vous soyez une entreprise commerciale ou une entité à but non lucratif, REVO-LUTION Paie s'adapte à votre réalité.</p>
+    <div class="audience-grid">
+      <div class="audience-card">
+        <div class="audience-icon">🏢</div>
+        <h3>Entreprises</h3>
+        <p>Sociétés commerciales et industrielles de toute taille implantées en RCA.</p>
+        <ul>
+          <li>SA, SARL, SAS</li>
+          <li>Entreprises individuelles</li>
+          <li>TPE, PME, grandes entreprises</li>
+        </ul>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">🤝</div>
+        <h3>Associations & ONG</h3>
+        <p>Entités à but non lucratif avec régime fiscal et social spécifique.</p>
+        <ul>
+          <li>Associations loi 1901</li>
+          <li>ONG nationales et internationales</li>
+          <li>Exonération CDS automatique</li>
+        </ul>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">📊</div>
+        <h3>Cabinets comptables</h3>
+        <p>Experts-comptables et auditeurs gérant la paie de plusieurs clients.</p>
+        <ul>
+          <li>Gestion multi-entreprises</li>
+          <li>Export Excel & PDF</li>
+          <li>Documents RH complets</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FONCTIONNALITÉS
+══════════════════════════════════════════════════════════════ -->
+<section class="features section" id="fonctionnalites">
+  <div class="container">
+    <div class="section-label"><span class="tag">Fonctionnalités</span></div>
+    <h2 class="section-title">Tout ce dont vous avez <span>besoin</span></h2>
+    <p class="section-desc">Un logiciel complet couvrant l'intégralité de la gestion de la paie et des ressources humaines.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feat-icon">💰</div>
+        <h3>Traitement des salaires</h3>
+        <p>Calcul automatique des salaires bruts, primes, avantages en nature, heures supplémentaires et toutes les déductions légales.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">📄</div>
+        <h3>Bulletins de paie PDF</h3>
+        <p>Génération et impression des bulletins de paie conformes aux exigences légales RCA avec en-tête de l'employeur.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">🏛️</div>
+        <h3>Déclarations CNSS</h3>
+        <p>Bordereau de déclaration mensuelle CNSS et attestations de prise en charge générés automatiquement.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">📊</div>
+        <h3>Déclaration IRPP</h3>
+        <p>Déclaration fiscale annuelle IRPP générée automatiquement selon les barèmes du Code Général des Impôts RCA.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">👥</div>
+        <h3>Gestion du personnel</h3>
+        <p>Registre des employés, congés payés, absences, avances, acomptes et historique complet de carrière.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">📝</div>
+        <h3>Contrats de travail</h3>
+        <p>Génération automatique des contrats CDI, CDD et CIPE pré-remplis avec les données de l'employé.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">📈</div>
+        <h3>Rapports & Analyses</h3>
+        <p>Livre de paie, rapport mensuel, statistiques des heures travaillées, analyse des coûts salariaux.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">🔐</div>
+        <h3>Sécurité & Rôles</h3>
+        <p>Gestion des utilisateurs avec niveaux d'accès (Administrateur, RH, Comptable) et sauvegarde automatique chiffrée.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon">📋</div>
+        <h3>Documents RH complets</h3>
+        <p>Attestation de salaire, certificat de travail, solde de tout compte, registre du personnel — tous en PDF.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     CONFORMITÉ
+══════════════════════════════════════════════════════════════ -->
+<section class="legal" id="conformite">
+  <div class="container">
+    <div class="section-label" style="text-align:center;margin-bottom:16px;">
+      <span class="tag tag-cyan">✔ Conformité légale</span>
+    </div>
+    <h2 class="section-title">100 % conforme à la<br><span style="color:var(--accent);">législation centrafricaine</span></h2>
+    <p class="section-desc" style="color:rgba(255,255,255,.65);">Mis à jour en continu selon les textes en vigueur publiés au Journal Officiel de la RCA.</p>
+    <div class="legal-grid">
+      <div class="legal-item">
+        <div class="legal-icon">⚖️</div>
+        <h4>Code du travail RCA</h4>
+        <p>Contrats, congés, licenciements, indemnités selon les articles du CDS</p>
+      </div>
+      <div class="legal-item">
+        <div class="legal-icon">🏥</div>
+        <h4>CSS-RCA / CNSS</h4>
+        <p>Cotisations salariales 3 % et patronales 19 % sur l'assiette plafonnée</p>
+      </div>
+      <div class="legal-item">
+        <div class="legal-icon">🧾</div>
+        <h4>IRPP & CGI</h4>
+        <p>Retenues à la source selon les barèmes du Code Général des Impôts</p>
+      </div>
+      <div class="legal-item">
+        <div class="legal-icon">💵</div>
+        <h4>SMIG 29 000 FCFA</h4>
+        <p>Décret n°21.439 du 31/12/2021 — SMAG 1 000 FCFA/jour</p>
+      </div>
+      <div class="legal-item">
+        <div class="legal-icon">🏗️</div>
+        <h4>Grille salariale officielle</h4>
+        <p>Historique complet : 1991, 2009 et 2021 — Employé, Ouvrier, Maîtrise, Cadre</p>
+      </div>
+      <div class="legal-item">
+        <div class="legal-icon">📑</div>
+        <h4>CDS — Art. 237-245 CGI</h4>
+        <p>Contribution pour le Développement Social selon la forme juridique</p>
+      </div>
+      <div class="legal-item">
+        <div class="legal-icon">🤝</div>
+        <h4>Exonération Associations/ONG</h4>
+        <p>Régime fiscal spécifique pour les entités à but non lucratif</p>
+      </div>
+      <div class="legal-item">
+        <div class="legal-icon">🏖️</div>
+        <h4>Congés payés & IJSS</h4>
+        <p>Calcul automatique des indemnités journalières de sécurité sociale</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     TÉMOIGNAGES
+══════════════════════════════════════════════════════════════ -->
+<section class="testimonials section" id="temoignages">
+  <div class="container">
+    <div class="section-label"><span class="tag">Témoignages</span></div>
+    <h2 class="section-title">Ils nous font <span>confiance</span></h2>
+    <p class="section-desc">Des structures centrafricaines qui ont adopté REVO-LUTION Paie pour leur gestion RH quotidienne.</p>
+    <div class="testimonials-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">Avant, je calculais les bulletins de paie à la main. Maintenant, en quelques clics, tout est généré automatiquement et conforme à la législation. Un gain de temps énorme !</p>
+        <div class="testi-author">
+          <div class="testi-avatar">MA</div>
+          <div>
+            <div class="testi-name">Marie-Ange KOYABANGUE</div>
+            <div class="testi-role">DRH — Cabinet d'audit, Bangui</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">Le logiciel prend correctement en compte l'exonération de la CDS pour notre ONG. C'est rare de trouver un outil adapté à notre réalité centrafricaine. Je le recommande.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:var(--accent);">JB</div>
+          <div>
+            <div class="testi-name">Jean-Baptiste MOKOULA</div>
+            <div class="testi-role">Responsable administratif — ONG locale, Bangui</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">La déclaration CNSS mensuelle et l'IRPP annuel se génèrent en un clic. Notre cabinet utilise REVO-LUTION Paie pour tous nos clients. Excellent rapport qualité-prix.</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:var(--orange);">PT</div>
+          <div>
+            <div class="testi-name">Pauline TOSSOU</div>
+            <div class="testi-role">Expert-Comptable — Cabinet FIDUCIA, Bangui</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     TARIFS
+══════════════════════════════════════════════════════════════ -->
+<section class="pricing section" id="tarifs">
+  <div class="container">
+    <div class="section-label"><span class="tag">Tarification</span></div>
+    <h2 class="section-title">Un prix unique,<br><span>sans mauvaise surprise</span></h2>
+    <p class="section-desc">Licence monoposte permanente — paiement unique, sans abonnement mensuel ni frais cachés.</p>
+    <div class="pricing-grid">
+      <div class="plan-card">
+        <div class="plan-name">TPE / Association / ONG</div>
+        <div class="plan-price"><sup>FCFA </sup>75 000</div>
+        <div class="plan-period">1 à 10 employés · Licence permanente</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>1 poste de travail</li>
+          <li>Toutes les fonctionnalités incluses</li>
+          <li>Mises à jour pendant 1 an</li>
+          <li>Support WhatsApp</li>
+        </ul>
+        <a href="#commander" class="btn btn-ghost" style="width:100%;justify-content:center;">Commander</a>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-popular">⭐ Le plus choisi</div>
+        <div class="plan-name">PME / Cabinet comptable</div>
+        <div class="plan-price"><sup>FCFA </sup>120 000</div>
+        <div class="plan-period">11 à 50 employés · Licence permanente</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>1 poste de travail</li>
+          <li>Toutes les fonctionnalités incluses</li>
+          <li>Mises à jour pendant 2 ans</li>
+          <li>Support prioritaire WhatsApp</li>
+          <li>Formation à domicile (Bangui)</li>
+        </ul>
+        <a href="#commander" class="btn btn-primary" style="width:100%;justify-content:center;">Commander</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Grande entreprise</div>
+        <div class="plan-price"><sup>FCFA </sup>200 000</div>
+        <div class="plan-period">50+ employés · Licence permanente</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>1 poste de travail</li>
+          <li>Toutes les fonctionnalités incluses</li>
+          <li>Mises à jour pendant 2 ans</li>
+          <li>Support dédié</li>
+          <li>Formation incluse (Bangui)</li>
+        </ul>
+        <a href="#commander" class="btn btn-ghost" style="width:100%;justify-content:center;">Commander</a>
+      </div>
+    </div>
+
+    <h3 style="text-align:center;color:var(--dark);font-size:1.1rem;font-weight:700;margin-bottom:24px;">Services complémentaires</h3>
+    <div class="addons-grid">
+      <div class="addon-card">
+        <div class="addon-icon">🔑</div>
+        <h4>Poste supplémentaire</h4>
+        <div class="addon-price">40 000 FCFA</div>
+      </div>
+      <div class="addon-card">
+        <div class="addon-icon">🔄</div>
+        <h4>Maintenance annuelle</h4>
+        <div class="addon-price">20 000 FCFA/an</div>
+      </div>
+      <div class="addon-card">
+        <div class="addon-icon">🎓</div>
+        <h4>Formation</h4>
+        <div class="addon-price">25 000 FCFA</div>
+      </div>
+      <div class="addon-card">
+        <div class="addon-icon">💻</div>
+        <h4>Réactivation (nouveau PC)</h4>
+        <div class="addon-price">15 000 FCFA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PROCESSUS
+══════════════════════════════════════════════════════════════ -->
+<section class="process section">
+  <div class="container">
+    <div class="section-label"><span class="tag">Comment ça marche ?</span></div>
+    <h2 class="section-title">Opérationnel en <span>4 étapes</span></h2>
+    <p class="section-desc">De la commande à la première fiche de paie, comptez moins d'une journée.</p>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-bubble">1</div>
+        <h4>Commander</h4>
+        <p>Remplissez le formulaire ou contactez-nous via WhatsApp</p>
+      </div>
+      <div class="process-step">
+        <div class="step-bubble">2</div>
+        <h4>Recevoir & installer</h4>
+        <p>Vous recevez le lien de téléchargement et la clé de licence</p>
+      </div>
+      <div class="process-step">
+        <div class="step-bubble">3</div>
+        <h4>Configurer</h4>
+        <p>Renseignez les informations de votre entreprise et importez vos employés</p>
+      </div>
+      <div class="process-step">
+        <div class="step-bubble">4</div>
+        <h4>Générer la paie</h4>
+        <p>Traitez les salaires et éditez les bulletins en quelques clics</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     CTA CENTRAL
+══════════════════════════════════════════════════════════════ -->
+<div class="cta-block">
+  <div class="container">
+    <h2>Prêt à simplifier votre gestion de la paie ?</h2>
+    <p>Rejoignez les entreprises et ONG centrafricaines qui font confiance à REVO-LUTION Paie.</p>
+    <div class="cta-actions">
+      <a href="#commander" class="btn btn-white">📥 Télécharger maintenant</a>
+      <a href="https://github.com/saint-hardi/REVO-LUTION4/releases/latest" target="_blank" class="btn btn-outline">Voir les notes de version</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FORMULAIRE DE COMMANDE
+══════════════════════════════════════════════════════════════ -->
+<section class="order section" id="commander">
+  <div class="container">
+    <div class="order-wrap">
+      <div class="order-info">
+        <div class="section-label" style="text-align:left;margin-bottom:16px;">
+          <span class="tag">Commander</span>
+        </div>
+        <h2>Obtenez votre licence REVO-LUTION Paie</h2>
+        <p>Remplissez le formulaire ci-contre ou contactez-nous directement par WhatsApp. Nous vous répondons sous 24h.</p>
+        <ul class="order-benefits">
+          <li><span class="icon">✅</span>Licence permanente — aucun abonnement mensuel</li>
+          <li><span class="icon">✅</span>Compatible Windows 10/11 (64 bits)</li>
+          <li><span class="icon">✅</span>Mise à jour sans perte de données</li>
+          <li><span class="icon">✅</span>Support en français par WhatsApp</li>
+          <li><span class="icon">✅</span>Formation disponible à Bangui</li>
+          <li><span class="icon">✅</span>Données stockées localement (aucun cloud)</li>
+        </ul>
+
+        <div style="margin-top:32px;padding:20px;background:#fff;border-radius:var(--radius-md);border:1px solid var(--border);">
+          <p style="font-size:.82rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">Téléchargement direct</p>
+          <a href="https://github.com/saint-hardi/REVO-LUTION4/releases/latest"
+             target="_blank"
+             class="btn btn-primary" style="width:100%;justify-content:center;">
+            📥 Télécharger REVO-LUTION Paie v1.0.5
+          </a>
+        </div>
+      </div>
+
+      <div class="order-form-box">
+        <h3>Nous contacter</h3>
+        <form onsubmit="return false;">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Prénom</label>
+              <input type="text" placeholder="Jean-Baptiste" />
+            </div>
+            <div class="form-group">
+              <label>Nom</label>
+              <input type="text" placeholder="MOKOULA" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Nom de l'entreprise / Organisation</label>
+            <input type="text" placeholder="Société ABC ou ONG XYZ" />
+          </div>
+          <div class="form-group">
+            <label>Téléphone / WhatsApp</label>
+            <input type="tel" placeholder="+236 75 XX XX XX" />
+          </div>
+          <div class="form-group">
+            <label>Type de structure</label>
+            <select>
+              <option value="">-- Sélectionner --</option>
+              <option>SA / SARL / SAS</option>
+              <option>Entreprise individuelle</option>
+              <option>Association / ONG</option>
+              <option>Cabinet comptable</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Nombre d'employés</label>
+            <select>
+              <option>1 – 10 employés</option>
+              <option>11 – 50 employés</option>
+              <option>50+ employés</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message (optionnel)</label>
+            <textarea placeholder="Questions, demande de démonstration, formation…"></textarea>
+          </div>
+          <button type="submit" class="btn-submit"
+            onclick="window.open('https://wa.me/23675000000?text=Bonjour, je suis intéressé par REVO-LUTION Paie.','_blank')">
+            📩 Envoyer la demande via WhatsApp
+          </button>
+          <p class="form-note">🔒 Vos données restent confidentielles et ne sont jamais partagées.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     CONTACT BAR
+══════════════════════════════════════════════════════════════ -->
+<div class="contact-bar" id="contact">
+  <div class="container">
+    <div class="contact-items">
+      <div class="contact-item">
+        <div class="contact-item-icon">📍</div>
+        <div>
+          <div class="contact-item-label">Adresse</div>
+          <div class="contact-item-val">Bangui, République Centrafricaine</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">📱</div>
+        <div>
+          <div class="contact-item-label">WhatsApp</div>
+          <div class="contact-item-val">+236 75 XX XX XX</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">✉️</div>
+        <div>
+          <div class="contact-item-label">Email</div>
+          <div class="contact-item-val">contact@solcom-rca.cf</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">🕐</div>
+        <div>
+          <div class="contact-item-label">Disponibilité</div>
+          <div class="contact-item-val">Lun – Sam · 8h – 18h</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════════ -->
 <footer>
-  <p>
-    &copy; 2025 <strong>Ets. Solution Comptable</strong> — NGATCHOU Saint-Hardi — Bangui, RCA.
-    Tous droits réservés.
-  </p>
-  <p style="margin-top:6px;">
-    RCCM : <strong>CA/BG/2018 A 1511</strong> &nbsp;|&nbsp; NIU : <strong>2362025P725550</strong>
-  </p>
-  <p style="margin-top:6px;">
-    <strong>REVO-LUTION Paie</strong> v1.0.4 —
-    Licence monoposte — Conforme au Code du travail RCA, CSS-RCA et CGI-RCA.
-  </p>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <strong>REVO-LUTION Paie</strong>
+        <p>Le logiciel de gestion de la paie conçu pour les entreprises et entités à but non lucratif de la République Centrafricaine. Édité par Ets. Solution Comptable, Bangui.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Produit</h4>
+        <ul>
+          <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+          <li><a href="#conformite">Conformité légale</a></li>
+          <li><a href="#tarifs">Tarifs</a></li>
+          <li><a href="https://github.com/saint-hardi/REVO-LUTION4/releases" target="_blank">Notes de version</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Légal</h4>
+        <ul>
+          <li><a href="#">Code du travail RCA</a></li>
+          <li><a href="#">CSS-RCA / CNSS</a></li>
+          <li><a href="#">Code Général des Impôts</a></li>
+          <li><a href="#">Décret SMIG 2021</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#commander">Nous contacter</a></li>
+          <li><a href="https://github.com/saint-hardi/REVO-LUTION4" target="_blank">GitHub</a></li>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Formation</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024–2026 <strong style="color:#94a3b8;">Ets. Solution Comptable</strong> — Bangui, République Centrafricaine. Tous droits réservés.</p>
+      <div class="footer-version">v1.0.5</div>
+    </div>
+  </div>
 </footer>
 
-<!-- ══ BOUTON WHATSAPP FLOTTANT ════════════════════════════════════ -->
-<a class="whatsapp-float" href="https://wa.me/23672076164?text=Bonjour%2C%20je%20suis%20int%C3%A9ress%C3%A9%20par%20REVO-LUTION%20Paie." target="_blank">
+<!-- ══════════════════════════════════════════════════════════════
+     WHATSAPP FLOTTANT
+══════════════════════════════════════════════════════════════ -->
+<a href="https://wa.me/23675000000?text=Bonjour, je suis intéressé par REVO-LUTION Paie."
+   target="_blank" class="wa-float" aria-label="Contacter par WhatsApp">
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
   </svg>
-  Commander sur WhatsApp
+  WhatsApp
 </a>
 
 </body>
